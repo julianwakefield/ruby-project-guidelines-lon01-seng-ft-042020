@@ -50,8 +50,9 @@ class Application
     def new_user
         reply = self.prompt.ask("What is your name? (Please enter your name and hit enter twice to confirm)")
         reply = user_input
+        User.create(name: reply)
         main_menu
-        # User.create(name: reply)
+        
     end
  
 
