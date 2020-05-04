@@ -89,11 +89,27 @@ class Application
             menu.choice "Self-catering?", -> {self.search_properties}
             menu.choice "Price per night", -> {self.search_properties} 
             menu.choice "Wifi", -> {self.search_properties}
-            menu.choice "All Properties", -> {search_all_properties}
+            menu.choice "All Properties", -> {all_properties}
             menu.choice "Main Menu", -> {}
         end
     end
 
+    def all_properties
+        Property.all.each do |property|
+          puts  "title: #{property.title}
+            no_of_rooms: #{property.no_of_rooms}
+            self_catered: #{property.self_catered}
+            wi_fi: #{property.wi_fi}
+            price_per_night: #{property.price_per_night}"
+            puts ""
+            end
+    end
+
+    # "property.title #{property.title}
+    # no_of_rooms #{property.no_of_rooms}
+    # self_catered: #{property.self_catered}
+    # wi_fi: #{property.wi_fi}
+    # price_per_night: #{property.price_per_night}"
     # def properties
     #     Property.all.map{|property| property.}
 
