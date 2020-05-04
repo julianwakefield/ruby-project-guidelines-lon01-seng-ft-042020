@@ -6,6 +6,7 @@ class Application
     
     def initialize()
         @prompt = TTY::Prompt.new
+        @tty_prompt= TTY::Prompt.new
     end
 
     def user_input
@@ -24,38 +25,40 @@ class Application
     end
 
     def main_menu
-        
-        puts "My Bookings"
-        puts "Manage bookings"
-        puts "Search Bookings"
-        puts "Exit"
-        # system "clear"
-        # puts "Hello, #{self.user.name}!"
-        # puts ""
-        # choice = self.prompt.select("Welcome! Please select one of the following:") do |menu|
-        #     # create a booking?
-        #     menu.choice "My Bookings", -> {self.user.Booking}
-        #     menu.choice "Manage Bookings", -> {self.user.manage_account}
-        #     menu.choice "Search Bookings", -> {self.search}
-        #     menu.choice "Exit", -> {Interface.exit_app}
-        # end
+        system "clear"
+        puts "Hello, #{}!"
+         puts ""
+         choice = self.prompt.select("Welcome! Please select one of the following:") do |menu|
+             # create a booking?
+             menu.choice "My Bookings", -> {self.user.Booking}
+             menu.choice "Manage Bookings", -> {self.user.manage_account}
+             menu.choice "Search Bookings", -> {self.search}
+             menu.choice "Exit", -> {Application.exit_app}
+         end
     end
+
+    def self.exit_app
+        system "clear"
+        puts ""
+        puts "See you next time!  by the swimming pool"
+        puts ""
+        exit!
+    end
+
 
 
     def new_user
-        puts "What is your name?"
-        # reply = self.tty_prompt.ask("What is your name? (Please enter your name)")
+        reply = self.prompt.ask("What is your name? (Please enter your name and hit enter twice to confirm)")
         reply = user_input
         main_menu
         # User.create(name: reply)
-
-        
     end
+ 
 
     def returning_user
-        puts "Please enter your name"
+        reply = self.prompt.ask("What is your name? (Please enter your name and hit enter twice to confirm)")
         reply = user_input
-        User.all.find{|user| user.name == reply}
+        #User.all.find{|user| user.name == reply}
     end
 
         
