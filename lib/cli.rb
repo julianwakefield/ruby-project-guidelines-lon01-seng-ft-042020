@@ -92,6 +92,11 @@ class Application
         end
     end
 
+
+
+    def render_method(properties)
+        properties.each do |property|
+            puts "title: #{property.title}
     def price_per_night
         
         Property.all.select {|property| property.price_per_night == 1000}
@@ -124,6 +129,15 @@ class Application
             wi_fi: #{property.wi_fi}
             self_catered: #{property.self_catered}
             price_per_night: #{property.price_per_night}"
+            puts ""
+        end
+    end
+
+    def all_properties
+        properties = Property.all.each do |property|
+        end
+        render_method(properties)
+    end
         
             end
         end
@@ -146,21 +160,51 @@ end
     # def properties
     #     Property.all.map{|property| property.}
 
+    def wi_fi
+        properties = Property.all.select do |property| 
+        property.wi_fi == "yes"
+        end
+        render_method(properties)
+    end
+
+    def self_catered
+        properties = Property.all.select do |property| 
+        property.self_catered == "yes"
+        end
+        render_method(properties)
+    end
+
+    def price_per_night
+        properties = Property.all.select do |property| 
+        property.price_per_night >= 100
+        end
+        render_method(properties)
+    end
+   
+    # def price_per_night_range
+    #     properties = Property.all.select do |property| 
+    #     property.price_per_night >= 100 && property.price_per_night <= 350
+    #     end
+    #     render_method(properties)
     # end
 
-    # def search_all_properties
-    #     Property.all
-    # end
+    # def price_per_night 
+    #     Property.all.select do |property| property.price_per_night > 100
+    #       puts  "title: #{property.title}
+    #         no_of_rooms: #{property.no_of_rooms}
+    #         self_catered: #{property.self_catered}
+    #         wi_fi: #{property.wi_fi}
+    #         price_per_night: #{property.price_per_night}"
+    #         puts ""
+    #     end    
+    # end  
 
-    # def no_of_bedrooms
-    #     puts "how many bedrooms?"
-    #     reply = user_input 
-    # end
+  
+
+
         
         
-        
-        # please enter your name
-        # user input
+
 
 
 
