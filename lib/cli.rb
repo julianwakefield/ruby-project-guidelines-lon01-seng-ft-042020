@@ -60,8 +60,6 @@ class Application
         exit!
     end
 
-
-
     def new_user
         reply = self.prompt.ask("What is your name? (Please enter your name and hit enter twice to confirm)")
         @user = User.new(name: reply)
@@ -97,35 +95,48 @@ class Application
     def price_per_night
         
         Property.all.select {|property| property.price_per_night == 1000}
-        #   puts  "title: #{property.title}
-        #     no_of_rooms: #{property.no_of_rooms}
-        #     self_catered: #{property.self_catered}
-        #     wi_fi: #{property.wi_fi}
-        #     price_per_night: #{property.price_per_night}"
-        #     puts ""
-
-    end
-
-    def wi_fi
-        Property.all.select do |property| property.wi_fi == "yes"
-        puts  "title: #{property.title}
-        no_of_rooms: #{property.no_of_rooms}
-        self_catered: #{property.self_catered}
-        price_per_night: #{property.price_per_night}"
-        puts ""
-        end
-    end
-
-    def all_properties
-        Property.all.each do |property|
           puts  "title: #{property.title}
             no_of_rooms: #{property.no_of_rooms}
             self_catered: #{property.self_catered}
             wi_fi: #{property.wi_fi}
             price_per_night: #{property.price_per_night}"
             puts ""
-            end
+
     end
+
+    def wi_fi
+        Property.all.select do |property| property.wi_fi == "yes"
+         puts  "title: #{property.title}
+        no_of_rooms: #{property.no_of_rooms}
+        self_catered: #{property.self_catered}
+        price_per_night: #{property.price_per_night}"
+        puts ""
+
+        end
+    end
+
+    def all_properties
+        # choice = self.prompt.select("Select your property") do |property|
+            # property.choice
+        Property.all.map do |property|
+           puts " title: #{property.title}
+            no_of_rooms: #{property.no_of_rooms}
+            wi_fi: #{property.wi_fi}
+            self_catered: #{property.self_catered}
+            price_per_night: #{property.price_per_night}"
+        
+            end
+        end
+    end
+
+        def new_booking
+            Booking.create(user_id: @user, property_id: self.property_id)
+        end
+
+end
+
+    
+
 
     # "property.title #{property.title}
     # no_of_rooms #{property.no_of_rooms}
@@ -165,4 +176,3 @@ class Application
 
 
 
-end
