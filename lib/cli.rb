@@ -2,13 +2,15 @@ require "pry"
 class Application
 
     attr_reader :prompt
-    attr_accessor :user
+    attr_accessor :user , :selected_prop ,:all
 
-    
+    @@all = []
     def initialize()
         @prompt = TTY::Prompt.new
         @tty_prompt= TTY::Prompt.new
         @user = nil
+        @selected_prop = nil
+        
     end
 
     def user_input
@@ -19,7 +21,7 @@ class Application
         puts "Hello! Welcome to the app"
         choice = self.prompt.select("Are you a New user or Returning user?") do |menu|
             menu.choice "New User", ->{new_user}
-            menu.choice "Returning User", ->{returning_user}
+            menu.choice "Returning User", ->{returning_user?}
 
             
             # something here?
@@ -62,7 +64,8 @@ class Application
 
     def new_user
         reply = self.prompt.ask("What is your name? (Please enter your name and hit enter twice to confirm)")
-        @user = User.new(name: reply)
+        @user = User.create(name: reply)
+        
         #User.find_or_create_by(name: reply)
         
         main_menu
@@ -73,8 +76,7 @@ class Application
 
     def returning_user
         reply = self.prompt.ask("What is your name? (Please enter your name and hit enter twice to confirm)")
-        reply = user_input
-        User.all.find{|user| user.name == reply}
+        @user = User.all.find{|user| user.name == reply}
     end
 
         
@@ -83,53 +85,12 @@ class Application
         choice = self.prompt.select("Search by:") do |menu|
            
             # create a booking?
-            menu.choice "No. of Bedrooms", -> {self.search_properties}
-            menu.choice "Self-catering?", -> {self.search_properties}
+            menu.choice "No. of Bedrooms", -> {no_of_bedrooms}
+            menu.choice "Self-catering?", -> {self_catered}
             menu.choice "Price per night", -> {price_per_night} 
             menu.choice "Wifi", -> {wi_fi}
             menu.choice "All Properties", -> {all_properties}
             menu.choice "Main Menu", -> {}
-        end
-    end
-
-
-
-    def render_method(properties)
-        properties.each do |property|
-            puts "title: #{property.title}
-    def price_per_night
-        
-        Property.all.select {|property| property.price_per_night == 1000}
-          puts  "title: #{property.title}
-            no_of_rooms: #{property.no_of_rooms}
-            self_catered: #{property.self_catered}
-            wi_fi: #{property.wi_fi}
-            price_per_night: #{property.price_per_night}"
-            puts ""
-
-    end
-
-    def wi_fi
-        Property.all.select do |property| property.wi_fi == "yes"
-         puts  "title: #{property.title}
-        no_of_rooms: #{property.no_of_rooms}
-        self_catered: #{property.self_catered}
-        price_per_night: #{property.price_per_night}"
-        puts ""
-
-        end
-    end
-
-    def all_properties
-        # choice = self.prompt.select("Select your property") do |property|
-            # property.choice
-        Property.all.map do |property|
-           puts " title: #{property.title}
-            no_of_rooms: #{property.no_of_rooms}
-            wi_fi: #{property.wi_fi}
-            self_catered: #{property.self_catered}
-            price_per_night: #{property.price_per_night}"
-            puts ""
         end
     end
 
@@ -138,27 +99,17 @@ class Application
         end
         render_method(properties)
     end
-        
+
+    def render_method(properties)
+        properties.each do |property|
+            puts "title: #{property.title}
+            no_of_rooms: #{property.no_of_rooms}
+            self_catered: #{property.self_catered}
+            wi_fi: #{property.wi_fi}
+            price_per_night: #{property.price_per_night}"
+            puts ""
             end
-        end
     end
-
-        def new_booking
-            Booking.create(user_id: @user, property_id: self.property_id)
-        end
-
-end
-
-    
-
-
-    # "property.title #{property.title}
-    # no_of_rooms #{property.no_of_rooms}
-    # self_catered: #{property.self_catered}
-    # wi_fi: #{property.wi_fi}
-    # price_per_night: #{property.price_per_night}"
-    # def properties
-    #     Property.all.map{|property| property.}
 
     def wi_fi
         properties = Property.all.select do |property| 
@@ -168,18 +119,48 @@ end
     end
 
     def self_catered
+        catered_reply = self.prompt.ask("Self-catered? yes/no")
         properties = Property.all.select do |property| 
-        property.self_catered == "yes"
+        property.self_catered == "#{catered_reply}"
+       
+        end
+        
+        render_method(properties)
+    end
+
+    def no_of_bedrooms
+        room_reply = self.prompt.ask("How many rooms will you like to book?")
+        properties = Property.all.select do |property| 
+        property.no_of_rooms == room_reply.to_i
         end
         render_method(properties)
     end
 
     def price_per_night
-        properties = Property.all.select do |property| 
-        property.price_per_night >= 100
-        end
-        render_method(properties)
+        
+        price_reply2 = self.prompt.ask("What's your maximum budget per night?")
+        properties = Property.all.select {|property| property.price_per_night <= price_reply2.to_i}
+        choices = render_method(properties)
+        properties = properties.map {|property| {name: property.title, value: property }}
+        @selected_prop = prompt.select("type the house that you want",properties)
+        #binding.pry
+        new_booking
+        
     end
+
+    def new_booking
+       
+        Booking.create(user_id: @user, property_id: @selected_prop.id)
+        
+        puts "Thank you for your booking"
+        main_menu
+    end
+
+    def my_bookings
+        bookings.all.find_by(booking.user_id == @user.id)
+        binding.pry
+    end
+    
    
     # def price_per_night_range
     #     properties = Property.all.select do |property| 
@@ -188,27 +169,11 @@ end
     #     render_method(properties)
     # end
 
-    # def price_per_night 
-    #     Property.all.select do |property| property.price_per_night > 100
-    #       puts  "title: #{property.title}
-    #         no_of_rooms: #{property.no_of_rooms}
-    #         self_catered: #{property.self_catered}
-    #         wi_fi: #{property.wi_fi}
-    #         price_per_night: #{property.price_per_night}"
-    #         puts ""
-    #     end    
-    # end  
-
+ 
+end
   
-
-
-        
-        
-
-
-
-
     # Login_menu
+        #  password
     # main_menu
         # Create new booking
         # View current bookings
