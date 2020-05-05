@@ -60,8 +60,6 @@ class Application
         exit!
     end
 
-
-
     def new_user
         reply = self.prompt.ask("What is your name? (Please enter your name and hit enter twice to confirm)")
         @user = User.new(name: reply)
@@ -94,38 +92,65 @@ class Application
         end
     end
 
+
+
+    def render_method(properties)
+        properties.each do |property|
+            puts "title: #{property.title}
     def price_per_night
         
         Property.all.select {|property| property.price_per_night == 1000}
-        #   puts  "title: #{property.title}
-        #     no_of_rooms: #{property.no_of_rooms}
-        #     self_catered: #{property.self_catered}
-        #     wi_fi: #{property.wi_fi}
-        #     price_per_night: #{property.price_per_night}"
-        #     puts ""
-
-    end
-
-    def wi_fi
-        Property.all.select do |property| property.wi_fi == "yes"
-        puts  "title: #{property.title}
-        no_of_rooms: #{property.no_of_rooms}
-        self_catered: #{property.self_catered}
-        price_per_night: #{property.price_per_night}"
-        puts ""
-        end
-    end
-
-    def all_properties
-        Property.all.each do |property|
           puts  "title: #{property.title}
             no_of_rooms: #{property.no_of_rooms}
             self_catered: #{property.self_catered}
             wi_fi: #{property.wi_fi}
             price_per_night: #{property.price_per_night}"
             puts ""
-            end
+
     end
+
+    def wi_fi
+        Property.all.select do |property| property.wi_fi == "yes"
+         puts  "title: #{property.title}
+        no_of_rooms: #{property.no_of_rooms}
+        self_catered: #{property.self_catered}
+        price_per_night: #{property.price_per_night}"
+        puts ""
+
+        end
+    end
+
+    def all_properties
+        # choice = self.prompt.select("Select your property") do |property|
+            # property.choice
+        Property.all.map do |property|
+           puts " title: #{property.title}
+            no_of_rooms: #{property.no_of_rooms}
+            wi_fi: #{property.wi_fi}
+            self_catered: #{property.self_catered}
+            price_per_night: #{property.price_per_night}"
+            puts ""
+        end
+    end
+
+    def all_properties
+        properties = Property.all.each do |property|
+        end
+        render_method(properties)
+    end
+        
+            end
+        end
+    end
+
+        def new_booking
+            Booking.create(user_id: @user, property_id: self.property_id)
+        end
+
+end
+
+    
+
 
     # "property.title #{property.title}
     # no_of_rooms #{property.no_of_rooms}
@@ -135,21 +160,51 @@ class Application
     # def properties
     #     Property.all.map{|property| property.}
 
+    def wi_fi
+        properties = Property.all.select do |property| 
+        property.wi_fi == "yes"
+        end
+        render_method(properties)
+    end
+
+    def self_catered
+        properties = Property.all.select do |property| 
+        property.self_catered == "yes"
+        end
+        render_method(properties)
+    end
+
+    def price_per_night
+        properties = Property.all.select do |property| 
+        property.price_per_night >= 100
+        end
+        render_method(properties)
+    end
+   
+    # def price_per_night_range
+    #     properties = Property.all.select do |property| 
+    #     property.price_per_night >= 100 && property.price_per_night <= 350
+    #     end
+    #     render_method(properties)
     # end
 
-    # def search_all_properties
-    #     Property.all
-    # end
+    # def price_per_night 
+    #     Property.all.select do |property| property.price_per_night > 100
+    #       puts  "title: #{property.title}
+    #         no_of_rooms: #{property.no_of_rooms}
+    #         self_catered: #{property.self_catered}
+    #         wi_fi: #{property.wi_fi}
+    #         price_per_night: #{property.price_per_night}"
+    #         puts ""
+    #     end    
+    # end  
 
-    # def no_of_bedrooms
-    #     puts "how many bedrooms?"
-    #     reply = user_input 
-    # end
+  
+
+
         
         
-        
-        # please enter your name
-        # user input
+
 
 
 
@@ -165,4 +220,3 @@ class Application
 
 
 
-end
