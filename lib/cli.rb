@@ -2,7 +2,7 @@ require "pry"
 class Application
 
     attr_reader :prompt
-    attr_accessor :user , :selected_prop ,:all
+    attr_accessor :user , :selected_prop ,:all, :new_booking, :created_booking
 
     @@all = []
     def initialize()
@@ -10,9 +10,34 @@ class Application
         @tty_prompt= TTY::Prompt.new
         @user = nil
         @selected_prop = nil
+        @new_booking = nil
+        @created_booking = nil
+        
         
     end
 
+    def title_screen
+        system "clear"
+        puts ''
+        puts ''
+        a = Artii::Base.new :font => 'speed'
+        puts a.asciify('Welcome to').light_green
+        puts a.asciify('RoomBooker').light_green
+        puts ''
+        puts ''
+        # puts " Booking made easy ".yellow.center(80, "-*")       
+       
+        # msg = "                           Loading Please Wait...                      "
+        msg = "Loading Please Wait...".center(70)
+        10.times do
+        print "\r#{ msg}".light_black
+        sleep 0.5
+        print "\r#{ ' ' * msg.size }"  # Send return and however many spaces are needed.
+        sleep 0.5
+        end
+  
+    end
+    
     def user_input
         gets.chomp
     end
@@ -20,8 +45,8 @@ class Application
     def welcome
         puts "Hello! Welcome to the app"
         choice = self.prompt.select("Are you a New user or Returning user?") do |menu|
-            menu.choice "New User", ->{new_user}
-            menu.choice "Returning User", ->{returning_user?}
+            menu.choice "New User", ->{find_or_create_new_user}
+            menu.choice "Returning User", ->{find_or_create_new_user}
 
             
             # something here?
@@ -45,7 +70,7 @@ class Application
                         # search by wifi, bedrooms, self-catering, price - list all -- menu
                         # don't want to list any that are FULL
                         # create the booking if fully paid
-             menu.choice "Manage My Bookings", -> {self.user.Booking}
+             menu.choice "Manage My Bookings", -> {my_bookings}
                 #  menu.choice "Manage Bookings", -> {self.user.manage_account}
                     # update booking
                     #  cancel booking
@@ -62,21 +87,12 @@ class Application
         exit!
     end
 
-    def new_user
+    def find_or_create_new_user
         reply = self.prompt.ask("What is your name? (Please enter your name and hit enter twice to confirm)")
-        @user = User.create(name: reply)
-        
-        #User.find_or_create_by(name: reply)
+        @user = User.find_or_create_by(name: reply)
         
         main_menu
         # needs money in wallet
-        
-    end
- 
-
-    def returning_user
-        reply = self.prompt.ask("What is your name? (Please enter your name and hit enter twice to confirm)")
-        @user = User.all.find{|user| user.name == reply}
     end
 
         
@@ -149,16 +165,27 @@ class Application
     end
 
     def new_booking
-       
-        Booking.create(user_id: @user, property_id: @selected_prop.id)
+        
+        @new_booking = Booking.create(user_id:@user.id, property_id: @selected_prop.id)
         
         puts "Thank you for your booking"
+        
         main_menu
     end
 
     def my_bookings
-        bookings.all.find_by(booking.user_id == @user.id)
-        binding.pry
+        
+    Booking.all.find_by(@new_booking.user_id == @user.id)
+       binding.pry
+       all_properties.find{|property| property.property_id == @new_booking.id} 
+
+        # puts "Here is your booking:"
+        # puts "Name: #{user_id}"
+    
+        # puts "Property: #{property_id}"
+       
+        # render_method(properties)
+        #binding.pry
     end
     
    

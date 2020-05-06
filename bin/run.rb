@@ -1,6 +1,7 @@
 require_relative '../config/environment'
 cli = Application.new
 
+# cli.title_screen
 cli.welcome
 cli.main_menu
     
