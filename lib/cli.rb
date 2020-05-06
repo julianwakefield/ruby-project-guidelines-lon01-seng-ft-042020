@@ -74,7 +74,7 @@ class Application
                 #  menu.choice "Manage Bookings", -> {self.user.manage_account}
                     # update booking
                     #  cancel booking
-             menu.choice "Exit", -> {exit_screen}
+             menu.choice "Exit", -> {quit = true}
          end
         end
     end
@@ -203,36 +203,31 @@ class Application
          end
         #end
         
-    
-        
-        
-    
     end
-    # def exit_screen
-    #     system "clear"
-    #     puts ''
-    #     puts ''
-    #     a = Artii::Base.new :font => 'banner3'
-    #     puts a.asciify('See You').light_green
-    #     puts " "
-    #     puts a.asciify('Next Time!').light_green
-    #     puts ''
-    #     puts ''
-    #     # puts " Booking made easy ".yellow.center(80, "-*")       
-       
-    #     # msg = "                           Loading Please Wait...                      "
-    #     msg = "Shutting Down Please Wait...".center(80)
-    #     5.times do
-    #     print "\r#{ msg}".light_black
-    #     sleep 0.5
-    #     print "\r#{ ' ' * msg.size }"  # Send return and however many spaces are needed.
-    #     sleep 0.5
 
+    def exit_screen
+        system "clear"
+        puts ''
+        puts ''
+        a = Artii::Base.new :font => 'banner3'
+        puts a.asciify('See You').light_green
+        puts " "
+        puts a.asciify('Next Time!').light_green
+        puts ''
+        puts ''
+        # puts " Booking made easy ".yellow.center(80, "-*")       
+       
+        # msg = "                           Loading Please Wait...                      "
+        msg = "Shutting Down Please Wait...".center(80)
+        5.times do
+        print "\r#{ msg}".light_black
+        sleep 0.5
+        print "\r#{ ' ' * msg.size }"  # Send return and however many spaces are needed.
+        sleep 0.5
         
-        
-    #     end
-    #     system "clear"
-    # end
+        end
+        system "clear"
+    end
 
     # def price_per_night_range
     #     properties = Property.all.select do |property| 
