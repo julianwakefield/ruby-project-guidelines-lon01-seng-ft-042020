@@ -20,7 +20,7 @@ class Application
         system "clear"
         puts ''
         puts ''
-        a = Artii::Base.new :font => 'speed'
+        a = Artii::Base.new :font => 'banner3'
         puts a.asciify('Welcome to').light_green
         puts a.asciify('RoomBooker').light_green
         puts ''
@@ -74,23 +74,17 @@ class Application
                 #  menu.choice "Manage Bookings", -> {self.user.manage_account}
                     # update booking
                     #  cancel booking
-             menu.choice "Exit", -> {Application.exit_app}
+             menu.choice "Exit", -> {exit_screen}
          end
         end
     end
 
-    def self.exit_app
-        system "clear"
-        puts ""
-        puts "See you next time!  by the swimming pool"
-        puts ""
-        exit!
-    end
+    
 
     def find_or_create_new_user
+        system "clear"
         reply = self.prompt.ask("What is your name? (Please enter your name and hit enter twice to confirm)")
         @user = User.find_or_create_by(name: reply)
-        
         main_menu
         # needs money in wallet
     end
@@ -111,12 +105,17 @@ class Application
     end
 
     def all_properties
-        properties = Property.all.each do |property|
-        end
-        render_method(properties)
+        system "clear"
+        properties = Property.all.each {|property| property}
+        choices = render_method(properties)
+        properties = properties.map {|property| {name: property.title, value: property}}
+        @selected_prop = prompt.select("Please select a property",properties)
+        # binding.pry
+        new_book
     end
 
     def render_method(properties)
+        system "clear"
         properties.each do |property|
             puts "title: #{property.title}
             no_of_rooms: #{property.no_of_rooms}
@@ -128,67 +127,113 @@ class Application
     end
 
     def wi_fi
-        properties = Property.all.select do |property| 
-        property.wi_fi == "yes"
-        end
-        render_method(properties)
+        system "clear"
+        want_wifi = self.prompt.ask("Wi-Fi? yes/no")
+        properties = Property.all.select {|property| property.wi_fi == want_wifi}
+        choices = render_method(properties)
+        properties = properties.map {|property| {name: property.title, value: property}}
+        @selected_prop = prompt.select("Please select a property",properties)
+        # binding.pry
+        new_book
+        
+
     end
 
     def self_catered
+        system "clear"
         catered_reply = self.prompt.ask("Self-catered? yes/no")
-        properties = Property.all.select do |property| 
-        property.self_catered == "#{catered_reply}"
+        properties = Property.all.select {|property| property.self_catered == catered_reply}
+        choices = render_method(properties)
+        properties = properties.map {|property| {name: property.title, value: property}}
+        @selected_prop = prompt.select("Please select a property",properties)
+        # binding.pry
+        new_book
        
-        end
-        
-        render_method(properties)
     end
 
     def no_of_bedrooms
-        room_reply = self.prompt.ask("How many rooms will you like to book?")
-        properties = Property.all.select do |property| 
-        property.no_of_rooms == room_reply.to_i
-        end
-        render_method(properties)
+        system "clear"
+        room_reply = self.prompt.ask("How many rooms would you like to book?")
+        properties = Property.all.select {|property| property.no_of_rooms == room_reply.to_i}
+        choices = render_method(properties)
+        properties = properties.map {|property| {name: property.title, value: property}}
+        @selected_prop = prompt.select("Please select a property",properties)
+        #binding.pry
+        new_book
     end
 
     def price_per_night
-        
+        system "clear"
         price_reply2 = self.prompt.ask("What's your maximum budget per night?")
         properties = Property.all.select {|property| property.price_per_night <= price_reply2.to_i}
         choices = render_method(properties)
-        properties = properties.map {|property| {name: property.title, value: property }}
-        @selected_prop = prompt.select("type the house that you want",properties)
+        properties = properties.map {|property| {name: property.title, value: property}}
+        @selected_prop = prompt.select("Please select a property",properties)
         #binding.pry
-        new_booking
+        new_book
         
     end
 
-    def new_booking
+    def new_book
         
-        @new_booking = Booking.create(user_id:@user.id, property_id: @selected_prop.id)
+        new_booking = Booking.create(user_id: @user.id, property_id: @selected_prop.id)
         
+        # Property.all.find {|booked_prop| booked_prop == @user.properties }
         puts "Thank you for your booking"
         
+       
         main_menu
     end
 
     def my_bookings
-        
-    Booking.all.find_by(@new_booking.user_id == @user.id)
-       binding.pry
-       all_properties.find{|property| property.property_id == @new_booking.id} 
-
-        # puts "Here is your booking:"
-        # puts "Name: #{user_id}"
-    
-        # puts "Property: #{property_id}"
-       
-        # render_method(properties)
+        system "clear"
         #binding.pry
-    end
+        all_bookings = User.find(@user.id).properties 
+        if all_bookings.size == 0
+           puts "empty"
+        else
+        
+         
+        render_method(all_bookings)
+        choices = render_method(all_bookings)
+        all_bookings = all_bookings.map {|property| {name: property.title, value: property }}
+        all_bookings = prompt.select("Here are your bookings , select one if you want to cancel it", all_bookings)
+        #menu.choice "Back to Main Menu", -> {}
+        @user.properties.destroy(all_bookings)
+         end
+        #end
+        
     
-   
+        
+        
+    
+    end
+    # def exit_screen
+    #     system "clear"
+    #     puts ''
+    #     puts ''
+    #     a = Artii::Base.new :font => 'banner3'
+    #     puts a.asciify('See You').light_green
+    #     puts " "
+    #     puts a.asciify('Next Time!').light_green
+    #     puts ''
+    #     puts ''
+    #     # puts " Booking made easy ".yellow.center(80, "-*")       
+       
+    #     # msg = "                           Loading Please Wait...                      "
+    #     msg = "Shutting Down Please Wait...".center(80)
+    #     5.times do
+    #     print "\r#{ msg}".light_black
+    #     sleep 0.5
+    #     print "\r#{ ' ' * msg.size }"  # Send return and however many spaces are needed.
+    #     sleep 0.5
+
+        
+        
+    #     end
+    #     system "clear"
+    # end
+
     # def price_per_night_range
     #     properties = Property.all.select do |property| 
     #     property.price_per_night >= 100 && property.price_per_night <= 350
@@ -199,16 +244,8 @@ class Application
  
 end
   
-    # Login_menu
-        #  password
-    # main_menu
-        # Create new booking
-        # View current bookings
-            # cancel booking
-            # amend booking
-            # back to main menu
-        # Quit
-            # Are you sure you want to quit? Y/N
+    
+            
 
 
 

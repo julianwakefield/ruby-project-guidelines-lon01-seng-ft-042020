@@ -4,6 +4,7 @@ cli = Application.new
 # cli.title_screen
 cli.welcome
 cli.main_menu
+cli.exit_screen
     
 # def search_by_property(prop,value)
 #     if prop == "byNight"
