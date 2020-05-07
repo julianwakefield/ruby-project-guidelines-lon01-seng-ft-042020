@@ -74,7 +74,7 @@ class Application
                 #  menu.choice "Manage Bookings", -> {self.user.manage_account}
                     # update booking
                     #  cancel booking
-             menu.choice "Exit", -> {quit = true}
+             menu.choice "Exit", -> {exit_screen}
          end
         end
     end
