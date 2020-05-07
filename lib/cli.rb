@@ -43,7 +43,7 @@ class Application
     end
 
     def welcome
-        puts "Hello! Welcome to the app"
+        puts " "
         choice = self.prompt.select("Are you a New user or Returning user?") do |menu|
             menu.choice "New User", ->{find_or_create_new_user}
             menu.choice "Returning User", ->{find_or_create_new_user}
@@ -155,10 +155,23 @@ class Application
         system "clear"
         room_reply = self.prompt.ask("How many rooms would you like to book?")
         properties = Property.all.select {|property| property.no_of_rooms == room_reply.to_i}
+        if properties.size == 0 
+            sleep 2
+            puts "there arent house available with  #{room_reply} of rooms"
+            sleep 2
+            no_of_bedrooms
+        end 
         choices = render_method(properties)
         properties = properties.map {|property| {name: property.title, value: property}}
         @selected_prop = prompt.select("Please select a property",properties)
-        #binding.pry
+        available_room = @selected_prop.no_of_rooms
+        if available_room <= 0
+            puts "No rooms available in this property please choose a new property"
+            sleep 2
+            no_of_bedrooms
+        end
+        update_room = available_room - room_reply.to_i
+        @selected_prop.update(no_of_rooms: update_room)
         new_book
     end
 
@@ -187,7 +200,6 @@ class Application
 
     def my_bookings
         system "clear"
-        #binding.pry
         all_bookings = User.find(@user.id).properties 
         if all_bookings.size == 0
            puts "empty"
@@ -197,11 +209,11 @@ class Application
         render_method(all_bookings)
         choices = render_method(all_bookings)
         all_bookings = all_bookings.map {|property| {name: property.title, value: property }}
-        all_bookings = prompt.select("Here are your bookings , select one if you want to cancel it", all_bookings)
-        #menu.choice "Back to Main Menu", -> {}
+        all_bookings = prompt.select("Here are your bookings , select one if you want to cancel it", all_bookings,)
+        #menu.goback"Back to Main Menu", -> {}
         @user.properties.destroy(all_bookings)
-         end
-        #end
+         
+        end 
         
     end
 
