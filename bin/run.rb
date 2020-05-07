@@ -3,7 +3,6 @@ cli = Application.new
 
 cli.title_screen
 cli.welcome
-
 cli.exit_screen
     
 # def search_by_property(prop,value)
@@ -20,7 +19,6 @@ cli.exit_screen
         
 #     end
 # end
-
 
 
 

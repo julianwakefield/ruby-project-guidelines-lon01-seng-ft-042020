@@ -22,13 +22,14 @@ class Application
         puts ''
         a = Artii::Base.new :font => 'banner3'
         puts a.asciify('Welcome to').light_green
+        puts " "
         puts a.asciify('RoomBooker').light_green
-        puts ''
-        puts ''
+        puts " "
+        puts " "
         # puts " Booking made easy ".yellow.center(80, "-*")       
        
         # msg = "                           Loading Please Wait...                      "
-        msg = "Loading Please Wait...".center(80)
+        msg = "Loading Please Wait...".center(100)
         5.times do
         print "\r#{ msg}".light_black
         sleep 0.5
@@ -169,10 +170,23 @@ class Application
         system "clear"
         room_reply = self.prompt.ask("How many rooms would you like to book?")
         properties = Property.all.select {|property| property.no_of_rooms == room_reply.to_i}
+        if properties.size == 0 
+            sleep 2
+            puts "there arent house available with  #{room_reply} of rooms"
+            sleep 2
+            no_of_bedrooms
+        end 
         choices = render_method(properties)
         properties = properties.map {|property| {name: property.title, value: property}}
         @selected_prop = prompt.select("Please select a property",properties)
-        #binding.pry
+        available_room = @selected_prop.no_of_rooms
+        if available_room <= 0
+            puts "No rooms available in this property please choose a new property"
+            sleep 2
+            no_of_bedrooms
+        end
+        update_room = available_room - room_reply.to_i
+        @selected_prop.update(no_of_rooms: update_room)
         new_book
     end
 
@@ -201,7 +215,6 @@ class Application
 
     def my_bookings
         system "clear"
-        #binding.pry
         all_bookings = User.find(@user.id).properties 
         if all_bookings.size == 0
            puts "empty"
@@ -211,11 +224,11 @@ class Application
         render_method(all_bookings)
         choices = render_method(all_bookings)
         all_bookings = all_bookings.map {|property| {name: property.title, value: property }}
-        all_bookings = prompt.select("Here are your bookings , select one if you want to cancel it", all_bookings)
-        #menu.choice "Back to Main Menu", -> {}
+        all_bookings = prompt.select("Here are your bookings , select one if you want to cancel it", all_bookings,)
+        #menu.goback"Back to Main Menu", -> {}
         @user.properties.destroy(all_bookings)
-         end
-        #end
+         
+        end 
         
     end
 
