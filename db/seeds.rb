@@ -7,7 +7,6 @@ user1 = User.create(name: "Chuk")
 property1 = Property.create(title: "Victorian Townhouse", no_of_rooms: 6, self_catered: "yes", wi_fi: "yes", price_per_night: 280)
 property2 = Property.create(title: "Victorian Basement Studio", no_of_rooms: 1, self_catered: "yes", wi_fi: "no", price_per_night: 100)
 property3 = Property.create(title: "Victorian 1st Floor Flat", no_of_rooms: 2, self_catered: "yes", wi_fi: "yes", price_per_night: 130)
-<<<<<<< HEAD
 property4 = Property.create(title: "Luxurious London Penthouse", no_of_rooms: 3, self_catered: "yes", wi_fi: "yes", price_per_night: 350)
 property5 = Property.create(title: "No. 10 Downing Street", no_of_rooms: 2, self_catered: "no", wi_fi: "no", price_per_night: 1000)
 property6 = Property.create(title: "Top of the Shard Flat", no_of_rooms: 4, self_catered: "yes", wi_fi: "yes", price_per_night: 180)
@@ -15,15 +14,6 @@ property7 = Property.create(title: "Edwarding Semi-detached House", no_of_rooms:
 property8 = Property.create(title: "Pool House", no_of_rooms: 1, self_catered: "yes", wi_fi: "no", price_per_night: 90)
 property9 = Property.create(title: "Brick Lane Shoreditch Sanctuary", no_of_rooms: 3, self_catered: "no", wi_fi: "yes", price_per_night: 180)
 property10 = Property.create(title: "Trendy London Flat", no_of_rooms: 2, self_catered: "yes", wi_fi: "yes", price_per_night: 180)
-=======
-# property4 = Property.create(title: "Luxurious London Penthouse", no_of_rooms: 3, self_catered: "yes", wi_fi: "yes", price_per_night: 350)
-# property5 = Property.create(title: "No. 10 Downing Street", no_of_rooms: 2, self_catered: "no", wi_fi: "no", price_per_night: 1000)
-# property6 = Property.create(title: "Top of the Shard Flat", no_of_rooms: 4, self_catered: "yes", wi_fi: "yes", price_per_night: 180)
-# property7 = Property.create(title: "Edwarding Semi-detached House", no_of_rooms: 5, self_catered: "yes", wi_fi: "yes", price_per_night: 220)
-# property8 = Property.create(title: "Pool House", no_of_rooms: 1, self_catered: "yes", wi_fi: "no", price_per_night: 90)
-# property9 = Property.create(title: "Brick Lane Shoreditch Sanctuary", no_of_rooms: 3, self_catered: "no", wi_fi: "yes", price_per_night: 180)
-# property10 = Property.create(title: "Trendy London Flat", no_of_rooms: 2, self_catered: "yes", wi_fi: "yes", price_per_night: 180)
->>>>>>> 2f9b0045c2591dfd4f32c80bcaf585c71a4670c6
 # property11 = Property.create(title: "Stylish and Modern Family Home", no_of_rooms: 6, self_catered: "yes", wi_fi: "yes", price_per_night: 180)
 # property12 = Property.create(title: "City Getaway Townhouse", no_of_rooms: 5, self_catered: "yes", wi_fi: "yes", price_per_night: 180)
 # property13 = Property.create(title: "Beautiful House with Conservatory", no_of_rooms: 4, self_catered: "yes", wi_fi: "yes", price_per_night: 180)

@@ -1,7 +1,7 @@
 require_relative '../config/environment'
 cli = Application.new
 
-# cli.title_screen
+cli.title_screen
 cli.welcome
 
 cli.exit_screen
@@ -23,4 +23,4 @@ cli.exit_screen
 
 
 
-puts "HELLO WORLD"
+

@@ -28,8 +28,8 @@ class Application
         # puts " Booking made easy ".yellow.center(80, "-*")       
        
         # msg = "                           Loading Please Wait...                      "
-        msg = "Loading Please Wait...".center(70)
-        10.times do
+        msg = "Loading Please Wait...".center(80)
+        5.times do
         print "\r#{ msg}".light_black
         sleep 0.5
         print "\r#{ ' ' * msg.size }"  # Send return and however many spaces are needed.
@@ -43,7 +43,15 @@ class Application
     end
 
     def welcome
-        puts "Hello! Welcome to the app"
+        system "clear"
+        puts ""
+        puts ""
+        a = Artii::Base.new :font => 'banner3'
+        puts a.asciify('Welcome to').light_green
+        puts ""
+        puts a.asciify('RoomBooker').light_green
+        puts ""
+        puts ""
         choice = self.prompt.select("Are you a New user or Returning user?") do |menu|
             menu.choice "New User", ->{find_or_create_new_user}
             menu.choice "Returning User", ->{find_or_create_new_user}
@@ -116,14 +124,20 @@ class Application
 
     def render_method(properties)
         system "clear"
-        properties.each do |property|
+        # arrayOfArraysOfProperies = properties.each_slice(3).to_a
+        # arrayOfArraysOfProperies.each do |arrayOfPropeties|
+        #     arrayOfPropeties.each do |property|
+            properties.each do |property|
             puts "title: #{property.title}
             no_of_rooms: #{property.no_of_rooms}
             self_catered: #{property.self_catered}
             wi_fi: #{property.wi_fi}
             price_per_night: #{property.price_per_night}"
             puts ""
-            end
+        
+            
+        end
+
     end
 
     def wi_fi
